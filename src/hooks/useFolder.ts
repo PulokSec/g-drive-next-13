@@ -1,5 +1,4 @@
-import { useReducer, useEffect } from "react"
-
+import { useReducer, useEffect } from "react";
 
 const ACTIONS = {
   SELECT_FOLDER: "select-folder",
@@ -7,7 +6,7 @@ const ACTIONS = {
   SET_CHILD_FOLDERS: "set-child-folders",
 }
 
-export const ROOT_FOLDER = { name: "My Drive", id: null, path: [] }
+export const ROOT_FOLDER = { name: "Root", id: null, path: [] }
 
 function reducer(state, { type, payload }) {
   switch (type) {
@@ -27,6 +26,11 @@ function reducer(state, { type, payload }) {
         ...state,
         childFolders: payload.childFolders,
       }
+    case ACTIONS.SET_CHILD_FILES:
+      return {
+        ...state,
+        childFiles: payload.childFiles,
+      }
     default:
       return state
   }
@@ -39,36 +43,36 @@ export function useFolder(folderId = null, folder = null) {
     childFolders: [],
     childFiles: [],
   })
-
+  const { currentUser } = useAuth()
 
   useEffect(() => {
     dispatch({ type: ACTIONS.SELECT_FOLDER, payload: { folderId, folder } })
   }, [folderId, folder])
 
-  // useEffect(() => {
-  //   if (folderId == null) {
-  //     return dispatch({
-  //       type: ACTIONS.UPDATE_FOLDER,
-  //       payload: { folder: ROOT_FOLDER },
-  //     })
-  //   }
+  useEffect(() => {
+    if (folderId == null) {
+      return dispatch({
+        type: ACTIONS.UPDATE_FOLDER,
+        payload: { folder: ROOT_FOLDER },
+      })
+    }
 
-  //   database.folders
-  //     .doc(folderId)
-  //     .get()
-  //     .then(doc => {
-  //       dispatch({
-  //         type: ACTIONS.UPDATE_FOLDER,
-  //         payload: { folder: database.formatDoc(doc) },
-  //       })
-  //     })
-  //     .catch(() => {
-  //       dispatch({
-  //         type: ACTIONS.UPDATE_FOLDER,
-  //         payload: { folder: ROOT_FOLDER },
-  //       })
-  //     })
-  // }, [folderId])
+    database.folders
+      .doc(folderId)
+      .get()
+      .then(doc => {
+        dispatch({
+          type: ACTIONS.UPDATE_FOLDER,
+          payload: { folder: database.formatDoc(doc) },
+        })
+      })
+      .catch(() => {
+        dispatch({
+          type: ACTIONS.UPDATE_FOLDER,
+          payload: { folder: ROOT_FOLDER },
+        })
+      })
+  }, [folderId])
 
   useEffect(() => {
     return database.folders
@@ -89,7 +93,7 @@ export function useFolder(folderId = null, folder = null) {
         .where("folderId", "==", folderId)
         .where("userId", "==", currentUser.uid)
         // .orderBy("createdAt")
-        .onSnapshot((snapshot:any) => {
+        .onSnapshot(snapshot => {
           dispatch({
             type: ACTIONS.SET_CHILD_FILES,
             payload: { childFiles: snapshot.docs.map(database.formatDoc) },

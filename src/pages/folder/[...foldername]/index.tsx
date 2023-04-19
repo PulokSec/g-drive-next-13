@@ -1,15 +1,17 @@
-import { EditFolderModal } from "</components/Ui/EditFolderModal>";
+import type { GetServerSideProps } from "next";
+import React, { useState } from "react";
 import { selectFolderState } from "</slices/folderSlice>";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { useState } from "react";
 import { AiOutlineArrowUp, AiOutlineInfoCircle } from "react-icons/ai";
 import { FaFolder } from "react-icons/fa";
-import { IoMdArrowDropdown } from "react-icons/io";
-import { MdOutlineViewList } from "react-icons/md";
-import { SlOptionsVertical } from "react-icons/sl";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
+import { IoIosArrowForward, IoMdArrowDropdown } from "react-icons/io";
+import { MdOutlineViewList } from "react-icons/md";
+import { SlOptionsVertical } from "react-icons/sl";
+import { EditFolderModal } from "</components/Ui/EditFolderModal>";
+
 const DataGrid = styled.div`
   display: flex;
   align-items: center;
@@ -90,9 +92,14 @@ export default function Folder() {
     setOpen(false);
   };
   const router = useRouter();
+  const length = router.asPath?.split("/")?.length;
+  const parentName = router.asPath
+    ?.split("/")
+    [length - 1]?.replaceAll("-", " ");
+  const routes = router.asPath?.split("/");
   const allFolders = useSelector(selectFolderState);
   const folders = allFolders?.folders?.filter(
-    (folder: any) => folder?.parentId === "folder"
+    (folder: any) => folder?.parentId === parentName
   );
   console.log(folders);
   return (
@@ -106,7 +113,18 @@ export default function Folder() {
       <div>
         <DataHeader>
           <div className="headerLeft" onClick={() => router.push("/folder")}>
-            <p>My Drive</p>
+            <p>My folder</p>
+            <IoIosArrowForward />
+            {routes?.map((route: any, i) => (
+              <>
+                <p
+                  // onClick={() => router.push(`/${route?.replaceAll(" ", "-")}`)}
+                >
+                  {route?.replaceAll("-", " ")}
+                </p>
+                {route !== "" && i < length - 1 && <IoIosArrowForward />}
+              </>
+            ))}
             <IoMdArrowDropdown />
           </div>
           <div className="headerRight">
@@ -132,7 +150,7 @@ export default function Folder() {
             </p>
           </DataListRow>
           <DataGrid>
-            {open && (
+          {open && (
               <EditFolderModal
                 open={open}
                 folderId={editId}

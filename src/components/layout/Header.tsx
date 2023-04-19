@@ -8,6 +8,7 @@ import { VscSettings } from 'react-icons/vsc';
 import { IoMdApps } from 'react-icons/io';
 import { RxAvatar } from 'react-icons/rx';
 import styled from 'styled-components';
+import { useRouter } from 'next/router';
 
 const HeaderContainer = styled.div`
     display: grid;
@@ -62,10 +63,11 @@ const HeaderIcons = styled.div`
 `
 
 export default function Header() {
+    const router = useRouter();
   return (
     <HeaderContainer>
-            <HeaderLogo>
-            <Image src="https://upload.wikimedia.org/wikipedia/commons/d/da/Google_Drive_logo.png" alt="Google Drive" width={50} height={40}/>
+            <HeaderLogo onClick={()=> router.push("/")}>
+            <Image priority src="https://upload.wikimedia.org/wikipedia/commons/d/da/Google_Drive_logo.png" alt="Google Drive" width={50} height={40}/>
                 <span>Drive</span>
             </HeaderLogo>
             <HeaderSearch>

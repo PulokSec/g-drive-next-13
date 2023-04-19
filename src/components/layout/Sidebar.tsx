@@ -8,6 +8,7 @@ import { RiDeleteBin6Line, RiHardDrive2Line } from 'react-icons/ri';
 import styled from 'styled-components';
 import DropDownModal from '../Ui/DropDownModal';
 import ProgressBar from '../Ui/ProgressBar';
+import { useRouter } from 'next/router';
 
 const SidebarContainer = styled.div`
     margin-top: 10px;
@@ -78,21 +79,22 @@ const UploadingPara = styled.p`
     letter-spacing: 1px;
 `
 const Sidebar = () => {
-    const [open, setOpen] = useState<boolean>(false);
     const [modalState, setModalState] = useState<number>(0);
     const [top, setTop] = useState<string>("50%");
     const [left, setLeft] = useState<string>("50%");
+    const router = useRouter();
+    const [open, setOpen] = useState<boolean>(false);
     const handleOpen = () =>{
         setOpen(true);
+    }
+    const handleClose =()=> {
+        setOpen(false);
     }
     const handleClick =(num: number,top: string, left: string)=> {
         setOpen(true);
         setModalState(num);
         setTop(top);
         setLeft(left);
-    }
-    const handleClose =()=> {
-        setOpen(false);
     }
     
 
@@ -108,7 +110,7 @@ const Sidebar = () => {
             <DropDownModal handleOpen={handleOpen} modalState={modalState} top={top} left={left} handleClose={handleClose} open={open} handleClick={handleClick}/>
                 </SidebarBtn>
                 <SidebarOptions>
-                    <SidebarOption>
+                    <SidebarOption onClick={() => router.push("/folder")}>
                        <IoMdArrowDropright/> <RiHardDrive2Line /><span>My Drive</span>
                     </SidebarOption>
                     <SidebarOption>

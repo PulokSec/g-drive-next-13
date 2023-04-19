@@ -1,12 +1,43 @@
 "use client";
-import FolderData from '</components/FolderData/FolderData>';
-import { IndexLayout } from '</components/layout/Layout>';
-import Sidebar from '</components/layout/Sidebar>';
-import Head from 'next/head';
-import styles from '../styles/Home.module.css';
+import docs from "../assets/docs.svg";
+import slides from "../assets/slides.svg";
+import sheets from "../assets/sheets.svg";
+import excel from "../assets/excel.svg";
+import word from "../assets/word.svg";
+import powerpoint from "../assets/powerpoint.svg";
+import Head from "next/head";
+import styled from "styled-components";
+import { AiOutlineArrowUp, AiOutlineInfoCircle } from "react-icons/ai";
+import { IoMdArrowDropdown } from "react-icons/io";
+import { MdOutlineViewList } from "react-icons/md";
+import Image from "next/image";
+import { useRouter } from "next/router";
 
+const DataHeader = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid lightgray;
+  .headerLeft {
+    padding-left: 10px;
+    display: flex;
+    align-items: center;
+    font-size: 24px;
+    border-radius: 20px;
+    &:hover {
+      background: whitesmoke;
+      cursor: pointer;
+    }
+  }
+  .headerRight svg {
+    margin: 0px 10px;
+    font-size: 24px;
+  }
+`;
 
 export default function Home() {
+  const router = useRouter();
+
   return (
     <>
       <Head>
@@ -15,11 +46,117 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-        <main className={styles.main}>
-        <Sidebar/>
-        <FolderData/>
-        </main>
+      <DataHeader>
+        <div className="headerLeft" onClick={() => router.push("/folder")}>
+          <p>My Drive</p>
+          <IoMdArrowDropdown />
+        </div>
+        <div className="headerRight">
+          <MdOutlineViewList />
+          <AiOutlineInfoCircle />
+        </div>
+      </DataHeader>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          marginTop: "10%",
+          marginBottom: "10%",
+        }}
+      >
+        <div style={{}}>
+          <p style={{ fontSize: "22px" }}>A place for all your files</p>
+        </div>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: "20px",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
+            <div>
+              <p>Google Docs,Sheets,Slides and More</p>
+            </div>
+            <div style={{ display: "flex", justifyContent: "flex-end" }}>
+              <div></div>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: "2px",
+                  marginRight: "-120px",
+                }}
+              >
+                <Image src={docs} alt="Google Drive" width={20} height={20} />
+                <Image src={sheets} alt="Google Drive" width={20} height={20} />
+                <Image src={slides} alt="Google Drive" width={20} height={20} />
+              </div>
+            </div>
+          </div>
+          <div style={{ transform: "rotate(60deg)" }}>
+            <Image
+              priority
+              src="https://upload.wikimedia.org/wikipedia/commons/d/da/Google_Drive_logo.png"
+              alt="Google Drive"
+              width={60}
+              height={60}
+            />
+          </div>
+          <div style={{ marginTop: "10px", marginBottom: "10px" }}>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+              }}
+            >
+              <div>
+                <p>
+                  Microsoft files and hundreds more <AiOutlineInfoCircle />
+                </p>
+              </div>
+              <div style={{ display: "flex", justifyContent: "flex-start" }}>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: "2px",
+                    marginLeft: "-108px",
+                  }}
+                >
+                  <Image
+                    src={excel}
+                    alt="Google Drive"
+                    width={20}
+                    height={20}
+                  />
+                  <Image src={word} alt="Google Drive" width={20} height={20} />
+                  <Image
+                    src={powerpoint}
+                    alt="Google Drive"
+                    width={20}
+                    height={20}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style={{ marginTop: "10px" }}>
+          <p>Drag files or folders to add them to Drive</p>
+        </div>
+      </div>
     </>
-  )
+  );
 }
-// Home.PageLayout = IndexLayout;

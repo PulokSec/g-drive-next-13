@@ -1,6 +1,6 @@
 import { AppState } from "</store/store>";
 import storage from "</store/sync_storage>";
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 import { PURGE } from "redux-persist";
 
 const initialState = {
@@ -14,9 +14,19 @@ const folderSlice = createSlice({
     addFolder: (state, { payload }) => {
       state.folders = payload;
     },
-    // deleteFolder: (state, action)=>{
-    //     return state.folders.filter((item:any) => item.id !== action.payload.id);
-    // }
+    updateFolder: (state, { payload }) =>  {
+      state.folders.map((folder:any) => {
+        if (folder.id === payload.id) {
+          folder.name = payload.name;
+        }
+        if(folder.parentId === payload.oldName) {
+          folder.parentId = payload.newName;
+        }
+      });
+    },
+    deleteFolder: (state, action)=>{
+        state.folders = state.folders.filter((item:any) => item.id !== action.payload.id);
+    }
   },
   extraReducers: (builder) => {
     builder.addCase(PURGE, (state) => {
@@ -25,6 +35,6 @@ const folderSlice = createSlice({
   },
 });
 
-export const { addFolder } = folderSlice.actions;
+export const { addFolder,updateFolder,deleteFolder } = folderSlice.actions;
 export const selectFolderState = (state: AppState) => state.folders;
 export default folderSlice.reducer;
