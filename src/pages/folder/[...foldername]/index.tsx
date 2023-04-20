@@ -118,7 +118,11 @@ export default function Folder() {
             {routes?.map((route: any, i) => (
               <>
                 <p
-                  // onClick={() => router.push(`/${route?.replaceAll(" ", "-")}`)}
+                  // onClick={() => {
+                  //   let st = "";
+                  //   router.asPath.split("/").slice(0,i).map((r: any)=>)
+                  //   router.push(`${router.asPath.split("/").slice(0,i)}`)
+                  // }}
                 >
                   {route?.replaceAll("-", " ")}
                 </p>

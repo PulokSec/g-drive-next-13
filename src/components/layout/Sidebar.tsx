@@ -103,7 +103,7 @@ const Sidebar = () => {
         <>
             <SidebarContainer>
                 <SidebarBtn>
-                    <button onClick={()=>handleClick(1,"40%","10%")}>
+                    <button onClick={()=>handleClick(1,"28%","10%")}>
                         <AiOutlinePlus/>
                         <span>New</span>
                     </button>

@@ -15,12 +15,18 @@ const folderSlice = createSlice({
       state.folders = payload;
     },
     updateFolder: (state, { payload }) =>  {
+      const newPathName = payload.newName?.replaceAll(" ","-");
+      const oldPathName = payload.oldName?.replaceAll(" ","-");
       state.folders.map((folder:any) => {
         if (folder.id === payload.id) {
-          folder.name = payload.name;
+          folder.name = payload.newName;
+          const newPath = folder?.path.replaceAll(`${oldPathName}`,`${newPathName}`)
+          folder.path = newPath;
         }
-        if(folder.parentId === payload.oldName) {
+        if(folder?.parentId === payload.oldName) {
           folder.parentId = payload.newName;
+          const newPath = folder?.path.replaceAll(`${oldPathName}`,`${newPathName}`)
+          folder.path = newPath;
         }
       });
     },
