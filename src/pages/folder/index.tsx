@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import { AiOutlineArrowUp, AiOutlineInfoCircle } from "react-icons/ai";
 import { FaFolder } from "react-icons/fa";
-import { IoMdArrowDropdown } from "react-icons/io";
+import { IoIosArrowForward, IoMdArrowDropdown } from "react-icons/io";
 import { MdOutlineViewList } from "react-icons/md";
 import { SlOptionsVertical } from "react-icons/sl";
 import { useSelector } from "react-redux";
@@ -65,7 +65,6 @@ const DataHeader = styled.div`
   justify-content: space-between;
   border-bottom: 1px solid lightgray;
   .headerLeft {
-    padding-left: 10px;
     display: flex;
     align-items: center;
     font-size: 24px;
@@ -105,9 +104,15 @@ export default function Folder() {
       </Head>
       <div>
         <DataHeader>
+          <div className="headerLeft">
           <div className="headerLeft" onClick={() => router.push("/folder")}>
-            <p>My Drive</p>
+            <p>My folder</p>
+            <IoIosArrowForward />
+            </div>
+            <div className="headerLeft" onClick={() => router.push("/folder")}>
+            <p>folder</p>
             <IoMdArrowDropdown />
+            </div>
           </div>
           <div className="headerRight">
             <MdOutlineViewList />

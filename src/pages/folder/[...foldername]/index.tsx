@@ -67,7 +67,6 @@ const DataHeader = styled.div`
   justify-content: space-between;
   border-bottom: 1px solid lightgray;
   .headerLeft {
-    padding-left: 10px;
     display: flex;
     align-items: center;
     font-size: 24px;
@@ -112,22 +111,24 @@ export default function Folder() {
       </Head>
       <div>
         <DataHeader>
-          <div className="headerLeft" onClick={() => router.push("/folder")}>
+          <div className="headerLeft">
+            <div className="headerLeft" onClick={() => router.push("/folder")}>
             <p>My folder</p>
             <IoIosArrowForward />
+            </div>
             {routes?.map((route: any, i) => (
-              <>
+              <div className="headerLeft" key={i}>
                 <p
-                  // onClick={() => {
-                  //   let st = "";
-                  //   router.asPath.split("/").slice(0,i).map((r: any)=>)
-                  //   router.push(`${router.asPath.split("/").slice(0,i)}`)
-                  // }}
+                  onClick={() => {
+                    const path = router.asPath.split("/").slice(0,i+1).join('/');
+                    console.log(path);
+                    router.push(path);
+                  }}
                 >
                   {route?.replaceAll("-", " ")}
                 </p>
                 {route !== "" && i < length - 1 && <IoIosArrowForward />}
-              </>
+              </div>
             ))}
             <IoMdArrowDropdown />
           </div>
