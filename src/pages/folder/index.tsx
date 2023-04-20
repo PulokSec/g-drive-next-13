@@ -1,10 +1,11 @@
+import { EditFileModal } from "</components/Ui/EditFileModal>";
 import { EditFolderModal } from "</components/Ui/EditFolderModal>";
 import { selectFolderState } from "</slices/folderSlice>";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { AiOutlineArrowUp, AiOutlineInfoCircle } from "react-icons/ai";
-import { FaFolder } from "react-icons/fa";
+import { FaFile, FaFolder } from "react-icons/fa";
 import { IoIosArrowForward, IoMdArrowDropdown } from "react-icons/io";
 import { MdOutlineViewList } from "react-icons/md";
 import { SlOptionsVertical } from "react-icons/sl";
@@ -81,15 +82,26 @@ const DataHeader = styled.div`
 `;
 export default function Folder() {
   const [open, setOpen] = useState<boolean>(false);
-  const [editId, setEditId] = useState<string>("");
+  const [editFolderId, setEditFolderId] = useState<string>("");
+  const [openFile, setOpenFile] = useState<boolean>(false);
+  const [editFileId, setEditFileId] = useState<string>("");
   const handleOpen = () => {
     setOpen(true);
   };
   const handleClose = () => {
     setOpen(false);
   };
+  const handleFileOpen = () => {
+    setOpenFile(true);
+  };
+  const handleFileClose = () => {
+    setOpenFile(false);
+  };
   const router = useRouter();
   const allFolders = useSelector(selectFolderState);
+  const files = allFolders?.files?.filter(
+    (file: any) => file?.parentId === "folder"
+  );
   const folders = allFolders?.folders?.filter(
     (folder: any) => folder?.parentId === "folder"
   );
@@ -105,13 +117,13 @@ export default function Folder() {
       <div>
         <DataHeader>
           <div className="headerLeft">
-          <div className="headerLeft" onClick={() => router.push("/folder")}>
-            <p>My folder</p>
-            <IoIosArrowForward />
+            <div className="headerLeft" onClick={() => router.push("/folder")}>
+              <p>My folder</p>
+              <IoIosArrowForward />
             </div>
             <div className="headerLeft" onClick={() => router.push("/folder")}>
-            <p>folder</p>
-            <IoMdArrowDropdown />
+              <p>folder</p>
+              <IoMdArrowDropdown />
             </div>
           </div>
           <div className="headerRight">
@@ -140,7 +152,7 @@ export default function Folder() {
             {open && (
               <EditFolderModal
                 open={open}
-                folderId={editId}
+                folderId={editFolderId}
                 handleOpen={handleOpen}
                 handleClose={handleClose}
               />
@@ -151,7 +163,7 @@ export default function Folder() {
                 <p onClick={() => router.push(folder?.path)}>{folder?.name}</p>
                 <span
                   onClick={() => {
-                    handleOpen(), setEditId(folder?.id);
+                    handleOpen(), setEditFolderId(folder?.id);
                   }}
                 >
                   <SlOptionsVertical />
@@ -167,12 +179,27 @@ export default function Folder() {
             </p>
           </DataListRow>
           <DataGrid>
-            {/* { files.map(file => (
-                        <DataFile key={file.id}>
-                            <InsertDriveFileIcon />
-                            <p>{file.data.filename}</p>
-                        </DataFile>
-                    ))} */}
+            {openFile && (
+              <EditFileModal
+                openFile={openFile}
+                fileId={editFileId}
+                handleFileOpen={handleFileOpen}
+                handleFileClose={handleFileClose}
+              />
+            )}
+            {files?.map((file: any) => (
+              <DataFile key={file.id}>
+                <FaFile />
+                <p>{file.name}</p>
+                <span
+                  onClick={() => {
+                    handleFileOpen(), setEditFileId(file?.id);
+                  }}
+                >
+                  <SlOptionsVertical />
+                </span>
+              </DataFile>
+            ))}
           </DataGrid>
         </div>
       </div>

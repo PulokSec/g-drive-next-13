@@ -5,6 +5,7 @@ import { PURGE } from "redux-persist";
 
 const initialState = {
   folders: [],
+  files:[]
 } as any;
 
 const folderSlice = createSlice({
@@ -29,10 +30,30 @@ const folderSlice = createSlice({
           folder.path = newPath;
         }
       });
+      state.files?.map((file:any) => {
+        if(file?.parentId === payload.oldName) {
+          file.parentId = payload.newName;
+          const newPath = file?.path.replaceAll(`${oldPathName}`,`${newPathName}`)
+          file.path = newPath;
+        }
+      });
     },
     deleteFolder: (state, action)=>{
         state.folders = state.folders.filter((item:any) => item.id !== action.payload.id);
-    }
+    },
+    addFile: (state, { payload }) => {
+      state.files = payload;
+    },
+    updateFile: (state, { payload }) =>  {
+      state.files?.map((file:any) => {
+        if (file?.id === payload.id) {
+          file.name = payload.newName;
+        }
+      });
+    },
+    deleteFile: (state, action)=>{
+      state.files = state.files.filter((item:any) => item?.id !== action.payload.id);
+  },
   },
   extraReducers: (builder) => {
     builder.addCase(PURGE, (state) => {
@@ -41,6 +62,6 @@ const folderSlice = createSlice({
   },
 });
 
-export const { addFolder,updateFolder,deleteFolder } = folderSlice.actions;
+export const { addFolder,updateFolder,deleteFolder,addFile,updateFile,deleteFile } = folderSlice.actions;
 export const selectFolderState = (state: AppState) => state.folders;
 export default folderSlice.reducer;

@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { BiSpreadsheet } from "react-icons/bi";
 import { BsFileEarmarkArrowDown, BsFileEarmarkArrowUp } from "react-icons/bs";
 import { CgLoadbarDoc } from "react-icons/cg";
@@ -10,6 +10,7 @@ import { TfiLayoutSliderAlt } from "react-icons/tfi";
 import styled from "styled-components";
 import Modal from "./Modal";
 import folderSlice, {
+  addFile,
   addFolder,
   selectFolderState,
 } from "</slices/folderSlice>";
@@ -80,9 +81,51 @@ const DropDownModal: React.FC<Props> = ({
   modalState,
   handleOpen,
 }) => {
-  // const allFolders = useAppSelector((state)=> state.folders);
-  // console.log(" folders", allFolders);
-  // console.log(" modalllState", modalState);
+  const inputFile = useRef<HTMLInputElement | null>(null);
+  const [folderOpen, setFolderOpen] = useState<boolean>(false);
+  const [fileName, setFileName] = useState<string>("");
+  const router = useRouter();
+  const allFiles = useSelector(selectFolderState);
+  const dispatch = useDispatch();
+
+  const onButtonClick = () => {
+    handleClose();
+    // `current` points to the mounted file input element
+    inputFile.current && inputFile.current.click();
+  };
+  const handleFolderOpen = () => {
+    setFolderOpen(true);
+  };
+  const handleFolderClose = () => {
+    setFolderOpen(false);
+  };
+
+  const handleFile = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const fileList = event.target.files;
+    console.log(fileList[0].name);
+    setFileName(`${fileList[0].name}`);
+    const length = router.asPath?.split("/")?.length;
+    const parentName = router.asPath
+      ?.split("/")
+      [length - 1]?.replaceAll("-", " ");
+
+    let d = {
+      id: (performance.now() + "").replace(".", ""),
+      createdAt: new Date(),
+      name: fileName,
+      parentId:
+        router.asPath === "/" || router.asPath === "/folder"
+          ? "folder"
+          : parentName,
+      path:
+        router.asPath === "/" || router.asPath === "/folder"
+          ? "/folder"
+          : `${router.asPath}`,
+    };
+    const newAdded = [...allFiles?.files, d];
+    dispatch(addFile(newAdded));
+    router.pathname === "/" && router.push("/folder");
+  };
   return (
     <>
       {open && modalState === 1 ? (
@@ -91,12 +134,12 @@ const DropDownModal: React.FC<Props> = ({
           left={left}
           open={open}
           onClose={handleClose}
-          closeOnOutsideClick={false}
+          closeOnOutsideClick={true}
         >
           <SidebarOptions>
             <SidebarOption
               onClick={() => {
-                handleOpen(), handleClick(2, "50%", "50%");
+                handleFolderOpen(), handleClose(), handleClick(2, "50%", "50%");
               }}
             >
               <div className="iconName">
@@ -105,7 +148,17 @@ const DropDownModal: React.FC<Props> = ({
               </div>
             </SidebarOption>
             <SidebarOption>
-              <div className="iconName">
+              <div
+                className="iconName"
+                onClick={onButtonClick}
+                onChange={handleFile}
+              >
+                <input
+                  type="file"
+                  id="file"
+                  ref={inputFile}
+                  style={{ display: "none" }}
+                />
                 <BsFileEarmarkArrowUp />
                 <span>File Upload</span>
               </div>
@@ -155,11 +208,11 @@ const DropDownModal: React.FC<Props> = ({
         <Modal
           top={top}
           left={left}
-          open={open}
-          onClose={handleClose}
+          open={folderOpen}
+          onClose={handleFolderClose}
           closeOnOutsideClick={false}
         >
-          <FolderModal handleCloseModal={handleClose} />
+          <FolderModal handleCloseModal={handleFolderClose} />
         </Modal>
       )}
     </>
@@ -182,7 +235,7 @@ const FolderModal: React.FC<IProps> = ({ handleCloseModal }) => {
   const [name, setName] = useState<string>("New Folder");
   const dispatch = useDispatch();
   const router = useRouter();
-  console.log(router);
+
   const allFolders = useSelector(selectFolderState);
   console.log(allFolders.folders);
 

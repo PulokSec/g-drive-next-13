@@ -42,7 +42,7 @@ console.log(folderData,folderId);
           closeOnOutsideClick={false}>
     <div>
       <FolderModalDIv>
-        <h3>New Folder</h3>
+        <h3>Update Folder Name</h3>
         <div
           style={{
             width: "300px",

@@ -1,4 +1,5 @@
 "use client";
+import React, { useEffect } from "react";
 import docs from "../assets/docs.svg";
 import slides from "../assets/slides.svg";
 import sheets from "../assets/sheets.svg";
@@ -12,6 +13,8 @@ import { IoMdArrowDropdown } from "react-icons/io";
 import { MdOutlineViewList } from "react-icons/md";
 import Image from "next/image";
 import { useRouter } from "next/router";
+import { useSelector } from "react-redux";
+import { selectFolderState } from "</slices/folderSlice>";
 
 const DataHeader = styled.div`
   display: flex;
@@ -37,6 +40,13 @@ const DataHeader = styled.div`
 
 export default function Home() {
   const router = useRouter();
+  const allFolders = useSelector(selectFolderState);
+
+  useEffect(() => {
+    if (allFolders?.folders?.length > 1) {
+      router.push("/folder");
+    }
+  }, [allFolders?.folders?.length]);
 
   return (
     <>
