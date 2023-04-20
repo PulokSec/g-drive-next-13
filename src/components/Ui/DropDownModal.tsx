@@ -102,8 +102,8 @@ const DropDownModal: React.FC<Props> = ({
 
   const handleFile = (event: React.ChangeEvent<HTMLInputElement>) => {
     const fileList = event.target.files;
-    console.log(fileList[0].name);
-    setFileName(`${fileList[0].name}`);
+    console.log(fileList && fileList[0].name);
+    setFileName(`${fileList && fileList[0].name}`);
     const length = router.asPath?.split("/")?.length;
     const parentName = router.asPath
       ?.split("/")
