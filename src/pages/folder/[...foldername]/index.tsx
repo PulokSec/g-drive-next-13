@@ -87,6 +87,7 @@ export default function Folder() {
   const [editId, setEditId] = useState<string>("");
   const [openFile, setOpenFile] = useState<boolean>(false);
   const [editFileId, setEditFileId] = useState<string>("");
+  const [folderName, setFolderName] = useState<string>("");
   const handleOpen = () => {
     setOpen(true);
   };
@@ -174,6 +175,7 @@ export default function Folder() {
               <EditFolderModal
                 open={open}
                 folderId={editId}
+                folderName={folderName}
                 handleOpen={handleOpen}
                 handleClose={handleClose}
               />
@@ -184,7 +186,7 @@ export default function Folder() {
                 <p onClick={() => router.push(folder?.path)}>{folder?.name}</p>
                 <span
                   onClick={() => {
-                    handleOpen(), setEditId(folder?.id);
+                    handleOpen(), setEditId(folder?.id),setFolderName(folder?.name);
                   }}
                 >
                   <SlOptionsVertical />

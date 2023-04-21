@@ -21,12 +21,14 @@ type Props = {
   handleClose: () => void;
   handleOpen: () => void;
   folderId: string;
+  folderName: string;
 };
 export const EditFolderModal: React.FC<Props> = ({
   handleClose,
   open,
   handleOpen,
-  folderId
+  folderId,
+  folderName,
 }) => {
   const allFolders = useSelector(selectFolderState);
   const folderData = allFolders.folders?.filter((folder:any)=> folder.id === folderId);
@@ -122,7 +124,7 @@ console.log(folderData,folderId);
                 fontWeight: "500",
                 cursor: "pointer",
               }}
-              onClick={()=> {dispatch(deleteFolder({id:folderId})), handleClose()}}
+              onClick={()=> {dispatch(deleteFolder({id:folderId, parentName: folderName})), handleClose()}}
             >
               Delete
             </button>

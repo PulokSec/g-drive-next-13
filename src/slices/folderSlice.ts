@@ -39,7 +39,8 @@ const folderSlice = createSlice({
       });
     },
     deleteFolder: (state, action)=>{
-        state.folders = state.folders.filter((item:any) => item.id !== action.payload.id);
+        state.folders = state.folders.filter((item:any) => item.id !== action.payload.id && item.parentId !== action.payload.parentName);
+        state.files = state.files.filter((item:any) => item.parentId !== action.payload.parentName);
     },
     addFile: (state, { payload }) => {
       state.files = payload;
