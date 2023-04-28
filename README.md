@@ -7,4 +7,4 @@
 4. Delete existing folders.
 5. State management with redux-toolkit.
 6.As no database connected so persist state in local storage with new redux persist configuration.
-7. Edit and update folders (50% done).
+7. Edit and update folders.
