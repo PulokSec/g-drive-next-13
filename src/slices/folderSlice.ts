@@ -18,7 +18,7 @@ const folderSlice = createSlice({
     updateFolder: (state, { payload }) =>  {
       const newPathName = payload.newName?.replaceAll(" ","-");
       const oldPathName = payload.oldName?.replaceAll(" ","-");
-      state.folders.map((folder:any) => {
+      state.folders?.map((folder:any) => {
         if (folder.id === payload.id) {
           folder.name = payload.newName;
           const newPath = folder?.path.replaceAll(`${oldPathName}`,`${newPathName}`)
@@ -30,7 +30,7 @@ const folderSlice = createSlice({
           folder.path = newPath;
         }
       });
-      state.files?.map((file:any) => {
+      state.files && state.files?.map((file:any) => {
         if(file?.parentId === payload.oldName) {
           file.parentId = payload.newName;
           const newPath = file?.path.replaceAll(`${oldPathName}`,`${newPathName}`)
@@ -39,8 +39,8 @@ const folderSlice = createSlice({
       });
     },
     deleteFolder: (state, action)=>{
-        state.folders = state.folders.filter((item:any) => item.id !== action.payload.id && item.parentId !== action.payload.parentName);
-        state.files = state.files.filter((item:any) => item.parentId !== action.payload.parentName);
+        state.folders = state.folders && state.folders?.filter((item:any) => item.id !== action.payload.id && item.parentId !== action.payload.parentName);
+        state.files = state.files && state.files?.filter((item:any) => item.parentId !== action.payload.parentName);
     },
     addFile: (state, { payload }) => {
       state.files = payload;
@@ -53,7 +53,7 @@ const folderSlice = createSlice({
       });
     },
     deleteFile: (state, action)=>{
-      state.files = state.files.filter((item:any) => item?.id !== action.payload.id);
+      state.files = state.files && state.files?.filter((item:any) => item?.id !== action.payload.id);
   },
   },
   extraReducers: (builder) => {
